@@ -1,17 +1,16 @@
-
-FROM node:22-alpine AS production
-
-ENV NODE_ENV=production
+FROM node:20-alpine
 
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 COPY package*.json ./
 RUN npm install --omit=dev && npm cache clean --force
 
-COPY src ./src
+COPY --chown=node:node src ./src
 
-USER node
+USER 1000
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node", "src/server.js"]
